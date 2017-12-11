@@ -48,34 +48,41 @@ public class FallingPage : MonoBehaviour {
         {
             double t1 = (-b + Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
             double t2 = (-b - Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-            Debug.Log(t1 + "," + t2);
+            // Debug.Log(t1 + "," + t2);
 
-            if (t1 >= 0.0 && t2 >= 0.0)
+            if (!Double.IsInfinity(t1) && !Double.IsInfinity(t2))
             {
-                double velocity1 = 0.0;
-                double position1 = 0.0;
-                Calc(t1, ref velocity1, ref position1);
-                string result = MakeResult(t1, velocity1, position1);
+                if (t1 >= 0.0 && t2 >= 0.0 && !Double.IsInfinity(t1) && !Double.IsInfinity(t2))
+                {
+                    double velocity1 = 0.0;
+                    double position1 = 0.0;
+                    Calc(t1, ref velocity1, ref position1);
+                    string result = MakeResult(t1, velocity1, position1);
 
-                result += "\n\n";
+                    result += "\n\n";
 
-                double velocity2 = 0.0;
-                double position2 = 0.0;
-                Calc(t2, ref velocity2, ref position2);
+                    double velocity2 = 0.0;
+                    double position2 = 0.0;
+                    Calc(t2, ref velocity2, ref position2);
 
-                result += MakeResult(t2, velocity2, position2);
+                    result += MakeResult(t2, velocity2, position2);
 
-                DisplayResult(result);
-            }
-            else if(t1 >= 0.0 || t2 >= 0.0)
-            {
-                double t = t1 > 0.0 ? t1 : t2;
+                    DisplayResult(result);
+                }
+                else if (t1 >= 0.0 || t2 >= 0.0)
+                {
+                    double t = t1 > 0.0 ? t1 : t2;
 
-                double velocity = 0.0;
-                double position = 0.0;
+                    double velocity = 0.0;
+                    double position = 0.0;
 
-                Calc(t, ref velocity, ref position);
-                DisplayResult(MakeResult(t, velocity, position));
+                    Calc(t, ref velocity, ref position);
+                    DisplayResult(MakeResult(t, velocity, position));
+                }
+                else
+                {
+                    InvalidResult();
+                }
             }
             else
             {
@@ -98,11 +105,18 @@ public class FallingPage : MonoBehaviour {
         {
             t = (m_velocity - m_initial_velocity) / m_acceleration;
 
-            double velocity = 0.0;
-            double position = 0.0;
+            if (t >= 0.0 && !Double.IsInfinity(t))
+            {
+                double velocity = 0.0;
+                double position = 0.0;
 
-            Calc(t, ref velocity, ref position);
-            DisplayResult(MakeResult(t, velocity, position));
+                Calc(t, ref velocity, ref position);
+                DisplayResult(MakeResult(t, velocity, position));
+            }
+            else
+            {
+                InvalidResult();
+            }
         }
         catch
         {
